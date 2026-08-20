@@ -12,6 +12,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Sentinel API", version="0.1.0")
 
+_extra_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -19,6 +20,8 @@ app.add_middleware(
         "http://localhost:3001",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:3001",
+        "https://civic-enforcement.vercel.app",
+        *_extra_origins,
     ],
     allow_credentials=True,
     allow_methods=["*"],
